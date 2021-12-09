@@ -65,4 +65,11 @@ public class TestValidUser {
 	public void testAddRemoteSystemWithValidUserAndSystem() throws Exception{
 
 	}
+
+
+	//-------------------------Espacio Santiago-----------------------------------
+	@Test
+	public void teststopRemoteSystemWithValidUserAndSystem() throws Exception{
+
+	}
 }
