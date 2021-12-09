@@ -27,7 +27,7 @@ public class TestValidUser {
 	 * Salud 
 	 */
 	int a = 3 + 2;
-
+//---------------------------------JAIME-----------------------
 
 	@Mock
 	private static AuthDAO mockAuthDao;
@@ -56,4 +56,9 @@ public class TestValidUser {
 	}
 
 
+
+
+
+
+	//------------------------------------------------------------
 }
