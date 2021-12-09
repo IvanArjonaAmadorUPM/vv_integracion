@@ -1,10 +1,12 @@
 package com.practica.integracion;
 
+
 import com.practica.integracion.DAO.AuthDAO;
 import com.practica.integracion.DAO.GenericDAO;
 import com.practica.integracion.DAO.User;
 import com.practica.integracion.manager.SystemManager;
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -22,7 +24,10 @@ public class TestValidUser {
 
 	/**
 	 * RELLENAR POR EL ALUMNO
+	 * Salud 
 	 */
+	int a = 3 + 2;
+
 
 	@Mock
 	private static AuthDAO mockAuthDao;
