@@ -16,11 +16,16 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 
+import javax.naming.OperationNotSupportedException;
+import com.practica.integracion.manager.SystemManagerException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+
 
 @ExtendWith(MockitoExtension.class)
 public class TestValidUser {
@@ -129,11 +134,36 @@ public class TestValidUser {
 		manager.deleteRemoteSystem(validUser.getId(),remote);
 
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(validUser, remote);
+	}
 
 	/**
 	 * INVALID SYSTEM
 	 */
 
 	//---------------------------------JAIME-----------------------
+
+	//-------------------------Espacio Santiago------------------------------------
+	@DisplayName("stopRemote valid user invalid system")
+	@Test
+	public void testStopRemoteSystemWithValidUserAndInvalidSystem() throws Exception{
+		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
+
+		String inValidId = "12345"; // id inválido de sistema
+		ArrayList<Object> lista = new ArrayList<>(Arrays.asList("uno", "dos"));
+		when(mockGenericDao.getSomeData(validUser, "where id=" + inValidId)).thenThrow(new OperationNotSupportedException());
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		assertThrows(SystemManagerException.class, () -> {
+			manager.startRemoteSystem(validUser.getId(), inValidId);
+		});
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + inValidId);
+
 	}
+
 }
