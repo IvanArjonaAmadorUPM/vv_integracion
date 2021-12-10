@@ -67,9 +67,28 @@ public class TestValidUser {
 		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + validId);
 	}
 
+	//-------------------------Espacio Santiago------------------------------------
+	@DisplayName("stopRemote valid user valid system")
+	@Test
+	public void testStopRemoteSystemWithValidUserAndSystem() throws Exception{
+		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
 
+		String validId = "12345"; // id valido de sistema
+		ArrayList<Object> lista = new ArrayList<>(Arrays.asList("uno", "dos"));
+		when(mockGenericDao.getSomeData(validUser, "where id=" + validId)).thenReturn(lista);
 
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		Collection<Object> retorno = manager.stopRemoteSystem(validUser.getId(), validId);
+		assertEquals(retorno.toString(), "[uno, dos]");
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + validId);
+
+	}
 
 
 	//-------------------------Espacio Ivan-----------------------------------
@@ -93,28 +112,6 @@ public class TestValidUser {
 	}
 
 
-	//-------------------------Espacio Santiago------------------------------------
-	@DisplayName("stopRemote valid user valid system")
-	@Test
-	public void testStopRemoteSystemWithValidUserAndSystem() throws Exception{
-		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
-		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
-
-		String validId = "12345"; // id valido de sistema
-		ArrayList<Object> lista = new ArrayList<>(Arrays.asList("uno", "dos"));
-		when(mockGenericDao.getSomeData(validUser, "where id=" + validId)).thenReturn(lista);
-
-		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
-
-		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
-
-		Collection<Object> retorno = manager.stopRemoteSystem(validUser.getId(), validId);
-		assertEquals(retorno.toString(), "[uno, dos]");
-
-		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + validId);
-
-	}
 	//-------------------------Espacio Igor------------------------------------
 	/*
 	La función deleteRemoteSystem, crea un usuario que es el mismo que elimina.
@@ -135,12 +132,13 @@ public class TestValidUser {
 
 		manager.deleteRemoteSystem(validUser.getId(),remote);
 
+		
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(validUser, remote);
 
 	}
 
 
-	
+
 	/**
 	 * INVALID SYSTEM
 	 */
