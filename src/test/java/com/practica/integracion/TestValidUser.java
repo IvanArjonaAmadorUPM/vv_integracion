@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -70,6 +72,22 @@ public class TestValidUser {
 	//-------------------------Espacio Santiago------------------------------------
 	@Test
 	public void teststopRemoteSystemWithValidUserAndSystem() throws Exception{
+		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
+
+		String validId = "12345"; // id valido de sistema
+		ArrayList<Object> lista = new ArrayList<>(Arrays.asList("uno", "dos"));
+		when(mockGenericDao.getSomeData(validUser, "where id=" + validId)).thenReturn(lista);
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		Collection<Object> retorno = manager.stopRemoteSystem(validUser.getId(), validId);
+		assertEquals(retorno.toString(), "[uno, dos]");
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + validId);
 
 	}
 }
