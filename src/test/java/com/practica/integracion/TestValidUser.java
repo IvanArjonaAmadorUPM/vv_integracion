@@ -5,6 +5,7 @@ import com.practica.integracion.DAO.AuthDAO;
 import com.practica.integracion.DAO.GenericDAO;
 import com.practica.integracion.DAO.User;
 import com.practica.integracion.manager.SystemManager;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +36,7 @@ public class TestValidUser {
 	private static AuthDAO mockAuthDao;
 	@Mock
 	private static GenericDAO mockGenericDao;
-
+	@DisplayName("startRemote valid user valid system")
 	@Test
 	public void testStartRemoteSystemWithValidUserAndSystem() throws Exception {
 		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList("hola", 2)));
@@ -63,16 +64,33 @@ public class TestValidUser {
 
 
 	//-------------------------Espacio Ivan-----------------------------------
+	@DisplayName("addRemote valid user valid system")
 	@Test
 	public void testAddRemoteSystemWithValidUserAndSystem() throws Exception{
-		User validUser = new User("2","Iván","Arjona","Valencia", new ArrayList<Object>(Arrays.asList(1, 2)));
+		User validUser = new User("98743","Iván","Arjona","Valencia", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
+
+		Object remote = "12345";
+		when(mockGenericDao.updateSomeData(validUser,remote)).thenReturn(true);
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		manager.addRemoteSystem(validUser.getId(),remote);
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).updateSomeData(validUser, remote);
+
+
+
 
 	}
 
 
 	//-------------------------Espacio Santiago------------------------------------
+	@DisplayName("stopRemote valid user valid system")
 	@Test
-	public void teststopRemoteSystemWithValidUserAndSystem() throws Exception{
+	public void testStopRemoteSystemWithValidUserAndSystem() throws Exception{
 		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
 		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
 
