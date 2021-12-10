@@ -16,11 +16,15 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 
+import javax.naming.OperationNotSupportedException;
+import com.practica.integracion.manager.SystemManagerException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class TestValidUser {
@@ -134,12 +138,6 @@ public class TestValidUser {
 
 	//---------------------------------JAIME-----------------------
 	}
-
-
-
-
-	//------------IVAN--------------------------
-	//-------------------------Espacio Ivan-----------------------------------
 	@DisplayName("addRemote valid user invalid system")
 	@Test
 	public void testAddRemoteSystemWithValidUserAndInvalidSystem() throws Exception{
@@ -152,11 +150,19 @@ public class TestValidUser {
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
 
-		manager.addRemoteSystem(validUser.getId(),remote);
-
+		assertThrows(SystemManagerException.class, () -> {
+			manager.addRemoteSystem(validUser.getId(),remote);
+		});
 		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
 		ordered.verify(mockGenericDao, times(1)).updateSomeData(validUser, remote);
 
 	}
+
+
+
+
+
+
+
 
 }
