@@ -25,10 +25,9 @@ import java.util.Collection;
 public class TestValidUser {
 
 	/**
-	 * RELLENAR POR EL ALUMNO
-	 * Salud 
+	 * VALID SYSTEM
 	 */
-	int a = 3 + 2;
+
 //---------------------------------JAIME-----------------------
 
 	@Mock
@@ -90,8 +89,13 @@ public class TestValidUser {
 		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
 		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + validId);
 
-
 	}
 	//-------------------------Espacio Igor------------------------------------
+		User validUser = new User()
 
+	/**
+	 * INVALID SYSTEM
+	 */
+
+	//---------------------------------JAIME-----------------------
 }
