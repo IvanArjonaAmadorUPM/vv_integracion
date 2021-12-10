@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
+import org.mockito.Spy;
 
 import javax.naming.OperationNotSupportedException;
 import com.practica.integracion.manager.SystemManagerException;
@@ -132,17 +133,13 @@ public class TestValidUser {
 
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(validUser, remote);
 
+	}
 
-
-
-
-		
 	/**
 	 * INVALID SYSTEM
 	 */
 
 	//---------------------------------Ivan-----------------------
-	}
 	@DisplayName("addRemote valid user invalid system")
 	@Test
 	public void testAddRemoteSystemWithValidUserAndInvalidSystem() throws Exception{
@@ -185,6 +182,28 @@ public class TestValidUser {
 
 	}
 
+	//-------------------------Espacio Igor------------------------------------
+
+	@DisplayName("DeleteRemote valid user valid system")
+	@Test
+	public void testDeleteRemoteSystemWithValidUserAndInValidSystem() throws Exception{
+		User validUser = new User("1","Ana","Lopez","Madrid", (List<Object>) new ArrayList<Object>(Arrays.asList(1, 2)));  
+		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
+
+		String idInvalid = "12345";
+		when(mockGenericDao.deleteSomeData(validUser, idInvalid)).thenThrow(new OperationNotSupportedException());
+		 
+		InOrder ordered = inOrder(mockGenericDao);
+		  
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+		
+		assertThrows(SystemManagerException.class, () -> {
+			  manager.deleteRemoteSystem(validUser.getId(), idInvalid);
+		  });		 
+		  
+		ordered.verify(mockGenericDao, times(1)).deleteSomeData(validUser, idInvalid);
+
+	}
 
 
 
