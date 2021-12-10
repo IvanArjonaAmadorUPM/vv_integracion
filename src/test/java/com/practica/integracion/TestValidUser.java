@@ -38,7 +38,7 @@ public class TestValidUser {
 
 	@Test
 	public void testStartRemoteSystemWithValidUserAndSystem() throws Exception {
-		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList("hola", 2)));
 		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
 
 		String validId = "12345"; // id valido de sistema
@@ -65,6 +65,7 @@ public class TestValidUser {
 	//-------------------------Espacio Ivan-----------------------------------
 	@Test
 	public void testAddRemoteSystemWithValidUserAndSystem() throws Exception{
+		User validUser = new User("2","Iván","Arjona","Valencia", new ArrayList<Object>(Arrays.asList(1, 2)));
 
 	}
 
@@ -89,5 +90,8 @@ public class TestValidUser {
 		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
 		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + validId);
 
+
 	}
+	//-------------------------Espacio Igor------------------------------------
+
 }
