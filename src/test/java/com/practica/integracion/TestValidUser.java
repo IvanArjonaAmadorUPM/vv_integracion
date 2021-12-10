@@ -30,16 +30,17 @@ import java.util.List;
 @ExtendWith(MockitoExtension.class)
 public class TestValidUser {
 
-	/**
-	 * VALID SYSTEM
-	 */
-
-//---------------------------------JAIME-----------------------
-
 	@Mock
 	private static AuthDAO mockAuthDao;
 	@Mock
 	private static GenericDAO mockGenericDao;
+
+
+	/**
+	 * VALID SYSTEM
+	 */
+
+	//---------------------------------JAIME-----------------------
 	@DisplayName("startRemote valid user valid system")
 	@Test
 	public void testStartRemoteSystemWithValidUserAndSystem() throws Exception {
