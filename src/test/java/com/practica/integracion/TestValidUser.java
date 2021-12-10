@@ -11,7 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
@@ -28,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
+
 public class TestValidUser {
 
 	@Mock
@@ -135,9 +139,13 @@ public class TestValidUser {
 
 	}
 
+
+	
 	/**
 	 * INVALID SYSTEM
 	 */
+
+
 
 	//---------------------------------Ivan-----------------------
 	@DisplayName("addRemote valid user invalid system")
@@ -159,6 +167,8 @@ public class TestValidUser {
 		ordered.verify(mockGenericDao, times(1)).updateSomeData(validUser, remote);
 
 	}
+
+	
 	//-------------------------Espacio Santiago------------------------------------
 	@DisplayName("stopRemote valid user invalid system")
 	@Test
@@ -187,11 +197,12 @@ public class TestValidUser {
 	@DisplayName("DeleteRemote valid user valid system")
 	@Test
 	public void testDeleteRemoteSystemWithValidUserAndInValidSystem() throws Exception{
+
 		User validUser = new User("1","Ana","Lopez","Madrid", (List<Object>) new ArrayList<Object>(Arrays.asList(1, 2)));  
-		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
+		Mockito.lenient().when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
 
 		String idInvalid = "12345";
-		when(mockGenericDao.deleteSomeData(validUser, idInvalid)).thenThrow(new OperationNotSupportedException());
+		Mockito.lenient().when(mockGenericDao.deleteSomeData(validUser, idInvalid)).thenThrow(new OperationNotSupportedException());
 		 
 		InOrder ordered = inOrder(mockGenericDao);
 		  
