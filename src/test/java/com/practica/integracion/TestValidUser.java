@@ -132,11 +132,16 @@ public class TestValidUser {
 
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(validUser, remote);
 
+
+
+
+
+		
 	/**
 	 * INVALID SYSTEM
 	 */
 
-	//---------------------------------JAIME-----------------------
+	//---------------------------------Ivan-----------------------
 	}
 	@DisplayName("addRemote valid user invalid system")
 	@Test
@@ -155,6 +160,28 @@ public class TestValidUser {
 		});
 		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
 		ordered.verify(mockGenericDao, times(1)).updateSomeData(validUser, remote);
+
+	}
+	//-------------------------Espacio Santiago------------------------------------
+	@DisplayName("stopRemote valid user invalid system")
+	@Test
+	public void testStopRemoteSystemWithValidUserAndInvalidSystem() throws Exception{
+		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
+
+		String inValidId = "12345"; // id inválido de sistema
+		when(mockGenericDao.getSomeData(validUser, "where id=" + inValidId)).thenThrow(new OperationNotSupportedException());
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		assertThrows(SystemManagerException.class, () -> {
+			manager.stopRemoteSystem(validUser.getId(), inValidId);
+		});
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + inValidId);
 
 	}
 
