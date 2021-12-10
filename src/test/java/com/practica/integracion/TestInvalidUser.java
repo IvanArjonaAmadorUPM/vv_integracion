@@ -44,7 +44,26 @@ public class TestInvalidUser {
 	 */
 
 	//---------------------------------JAIME-----------------------
+	@DisplayName("startRemote inValid user valid system")
+	@Test
+	public void testStartRemoteSystemWithInValidUserAndSystem() throws Exception{
+		User invalidUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
 
+		String validId = "12345";
+		when(mockGenericDao.getSomeData(null, "where id=" + validId)).thenThrow(new OperationNotSupportedException());
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		assertThrows(SystemManagerException.class, () -> {
+			manager.startRemoteSystem(invalidUser.getId(), validId);
+		});
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(null, "where id=" + validId);
+
+	}
 	//-------------------------Espacio Santiago------------------------------------
 	@DisplayName("stopRemote inValid user valid system")
 	@Test
@@ -126,6 +145,26 @@ public class TestInvalidUser {
 
 	//---------------------------------JAIME-----------------------
 
+	@DisplayName("startRemote inValid user inValid system")
+	@Test
+	public void testStartRemoteSystemWithInValidUserAndInValidSystem() throws Exception{
+		User invalidUser = new User("12","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
+
+		String inValidId = "12345";
+		when(mockGenericDao.getSomeData(null, "where id=" + inValidId)).thenThrow(new OperationNotSupportedException());
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		assertThrows(SystemManagerException.class, () -> {
+			manager.startRemoteSystem(invalidUser.getId(), inValidId);
+		});
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(null, "where id=" + inValidId);
+
+	}
 	//-------------------------Espacio Santiago------------------------------------
 	@DisplayName("stopRemote inValid user inValid system")
 	@Test
