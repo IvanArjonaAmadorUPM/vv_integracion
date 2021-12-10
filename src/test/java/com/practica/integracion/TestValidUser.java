@@ -109,11 +109,31 @@ public class TestValidUser {
 
 	}
 	//-------------------------Espacio Igor------------------------------------
-		User validUser = new User()
+	/*
+	La función deleteRemoteSystem, crea un usuario que es el mismo que elimina.
+	Esto hace que no se pueda verificar ni utilizar el usuario pasado por argumento.
+	*/
+
+	@DisplayName("DeleteRemote valid user valid system")
+	@Test
+	public void testDeleteRemoteSystemWithValidUserAndSystem() throws Exception{
+		User validUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
+
+		String remote = "12345";
+		when(mockGenericDao.deleteSomeData(validUser,remote)).thenReturn(true);
+
+		InOrder ordered = inOrder(mockGenericDao);
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+
+		manager.deleteRemoteSystem(validUser.getId(),remote);
+
+		ordered.verify(mockGenericDao, times(1)).deleteSomeData(validUser, remote);
 
 	/**
 	 * INVALID SYSTEM
 	 */
 
 	//---------------------------------JAIME-----------------------
+	}
 }
