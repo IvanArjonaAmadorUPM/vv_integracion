@@ -129,7 +129,7 @@ public class TestInvalidUser {
 		assertThrows(SystemManagerException.class, () -> {
 			manager.deleteRemoteSystem(inValidUser.getId(), remote);
 		});
-		ordered.verify(mockAuthDao, times(1)).getAuthData(inValidUser.getId());
+		ordered.verify(mockAuthDao, times(0)).getAuthData(inValidUser.getId());
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(null, remote);
 
 	}
@@ -219,7 +219,7 @@ public class TestInvalidUser {
 	@DisplayName("DeleteRemote inValid user inValid system")
 	@Test
 	public void testDeleteRemoteSystemWithValidUserAndInValidSystem() throws Exception {
-		User inValidUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
+		User inValidUser = new User("98776","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
 		when(mockAuthDao.getAuthData(inValidUser.getId())).thenReturn(null);
 
 		String remote = "12345";
@@ -232,7 +232,7 @@ public class TestInvalidUser {
 			manager.deleteRemoteSystem(inValidUser.getId(), remote);
 		});
 
-		ordered.verify(mockAuthDao, times(1)).getAuthData(inValidUser.getId());
+		ordered.verify(mockAuthDao, times(0)).getAuthData(inValidUser.getId());
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(null, remote);
 
 	}
