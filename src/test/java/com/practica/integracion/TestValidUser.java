@@ -213,7 +213,7 @@ public class TestValidUser {
 
 	//-------------------------Espacio Igor------------------------------------
 
-	@DisplayName("DeleteRemote valid user valid system")
+	@DisplayName("DeleteRemote valid user invalid system")
 	@Test
 	public void testDeleteRemoteSystemWithValidUserAndInValidSystem() throws Exception{
 

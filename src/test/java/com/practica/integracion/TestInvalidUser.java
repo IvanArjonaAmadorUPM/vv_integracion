@@ -129,7 +129,7 @@ public class TestInvalidUser {
 		assertThrows(SystemManagerException.class, () -> {
 			manager.deleteRemoteSystem(inValidUser.getId(), remote);
 		});
-		ordered.verify(mockAuthDao, times(0)).getAuthData(inValidUser.getId());
+		ordered.verify(mockAuthDao, times(1)).getAuthData(inValidUser.getId());
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(null, remote);
 
 	}
@@ -189,7 +189,7 @@ public class TestInvalidUser {
 
 
 	//---------------------------------Ivan-----------------------
-	@DisplayName("addRemote invalid user valid system")
+	@DisplayName("addRemote invalid user invalid system")
 	@Test
 	public void testAddRemoteSystemWithInValidUserAndInValidSystem() throws Exception{
 		User inValidUser = new User("98743","Iván","Arjona","Valencia", new ArrayList<Object>(Arrays.asList(1, 2)));
@@ -216,7 +216,7 @@ public class TestInvalidUser {
 	Esto hace que no se pueda verificar ni utilizar el usuario pasado por argumento.
 	*/
 
-	@DisplayName("DeleteRemote inValid user inValid system exception OperationNotSupportedException ")
+	@DisplayName("DeleteRemote inValid user inValid system")
 	@Test
 	public void testDeleteRemoteSystemWithValidUserAndInValidSystem() throws Exception {
 		User inValidUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
@@ -225,35 +225,14 @@ public class TestInvalidUser {
 		String remote = "12345";
 		when(mockGenericDao.deleteSomeData(null,remote)).thenThrow(new OperationNotSupportedException());
 
-		InOrder ordered = inOrder(mockGenericDao);
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
 
 		assertThrows(SystemManagerException.class, () -> {
 			manager.deleteRemoteSystem(inValidUser.getId(), remote);
 		});
 
-		ordered.verify(mockAuthDao, times(0)).getAuthData(inValidUser.getId());
-		ordered.verify(mockGenericDao, times(1)).deleteSomeData(null, remote);
-
-	}
-
-	@DisplayName("DeleteRemote inValid user inValid system not deleted")
-	@Test
-	public void testDeleteRemoteSystemWithValidUserAndInValidSystem2() throws Exception {
-		User inValidUser = new User("1","Ana","Lopez","Madrid", new ArrayList<Object>(Arrays.asList(1, 2)));
-		when(mockAuthDao.getAuthData(inValidUser.getId())).thenReturn(null);
-
-		String remote = "12345";
-		when(mockGenericDao.deleteSomeData(null,remote)).thenThrow(new OperationNotSupportedException());
-
-		InOrder ordered = inOrder(mockGenericDao);
-		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
-
-		assertThrows(SystemManagerException.class, () -> {
-			manager.deleteRemoteSystem(inValidUser.getId(), remote);
-		});
-
-		ordered.verify(mockAuthDao, times(0)).getAuthData(inValidUser.getId());
+		ordered.verify(mockAuthDao, times(1)).getAuthData(inValidUser.getId());
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(null, remote);
 
 	}
