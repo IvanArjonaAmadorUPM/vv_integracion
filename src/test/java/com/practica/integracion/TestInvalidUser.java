@@ -126,9 +126,11 @@ public class TestInvalidUser {
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
 
-		assertThrows(SystemManagerException.class, () -> {
+		SystemManagerException ex = assertThrows(SystemManagerException.class, () -> {
 			manager.deleteRemoteSystem(inValidUser.getId(), remote);
 		});
+		assertEquals("cannot delete remote: does remote exists?", ex.getMessage());
+
 		ordered.verify(mockAuthDao, times(0)).getAuthData(inValidUser.getId());
 		ordered.verify(mockGenericDao, times(1)).deleteSomeData(null, remote);
 
